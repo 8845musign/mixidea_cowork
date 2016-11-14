@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import {EncodeToMp3Service} from './encode-to-mp3.service'
 import { BehaviorSubject } from 'rxjs';
 import {generate_random_string} from './../../util_func';
-import {AngularFire} from 'angularfire2';
+import {AngularFire, FirebaseApp} from 'angularfire2';
 import * as firebase from 'firebase';
 import { Store } from '@ngrx/store';
 import { UserauthService} from './../../core/service/userauth.service';
@@ -26,18 +26,13 @@ export class EventFirebaseService {
 
   constructor(private encode_to_mp3: EncodeToMp3Service,
               private af: AngularFire,
+              @Inject(FirebaseApp) firebaseApp: firebase.app.App,
               private user_auth : UserauthService,
               public store: Store<any> ) {
-    
-    var config = {
-      apiKey: "AIzaSyBp_ZDqoPygbPs7jMclrBSJ3a99t1Yvr1k",
-      authDomain: "mixidea-91a20.firebaseapp.com",
-      databaseURL: "https://mixidea-91a20.firebaseio.com",
-      storageBucket: "mixidea-91a20.appspot.com",
-      messagingSenderId: "46563705700"
-    };
-    firebase.initializeApp(config);
-    this.storage_ref = firebase.storage().ref();
+
+    console.log("firebaseapp test");
+    this.storage_ref = firebaseApp.storage().ref();
+   
     console.log("firebase storage is initialized");
 
   }

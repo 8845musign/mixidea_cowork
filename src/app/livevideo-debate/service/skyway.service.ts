@@ -35,7 +35,8 @@ export class SkywayService {
     const user_id = this.user_auth.own_user.id;
 
     this.own_peer = new Peer(user_id, {
-      key: '63899577-16cc-4fdb-9a4d-ad3ace362cde',
+      key: '1ea20ebb-c109-4262-b9b8-f2afed75e3af',
+//        key: '63899577-16cc-4fdb-9a4d-ad3ace362cde',
       debug:3
     });
 

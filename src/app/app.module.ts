@@ -1,10 +1,7 @@
-/// <reference path="./../../node_modules/firebase/firebase.d.ts" />
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-//import { routing, appRoutingProviders } from './app.routing';
-
 import { Store, StoreModule } from '@ngrx/store';
 import { counterReducer } from './redux/counter_reducer';
 import {TranscriptionReducer} from './redux/transcription-reducer'

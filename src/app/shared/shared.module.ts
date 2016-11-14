@@ -1,4 +1,3 @@
-/// <reference path="./../../../node_modules/firebase/firebase.d.ts" />
 
 
 import { NgModule, ModuleWithProviders }       from '@angular/core';
@@ -32,23 +31,26 @@ import { KeysInObjectPipe } from './pipes/keys-in-object.pipe';
 
 import { AngularFireModule, AuthProviders, AuthMethods, } from 'angularfire2';
 
+
+/*
 const firebaseConfig = {
     apiKey: "AIzaSyBp_ZDqoPygbPs7jMclrBSJ3a99t1Yvr1k",
     authDomain: "mixidea-91a20.firebaseapp.com",
     databaseURL: "https://mixidea-91a20.firebaseio.com",
-    storageBucket: "mixidea-91a20.appspot.com"
+    storageBucket: "mixidea-91a20.appspot.com",
+    messagingSenderId: "46563705700"
   };
 
 const firebaseAuthConfig = {
     provider: AuthProviders.Facebook,
     method: AuthMethods.Popup
   }
-
+*/
 
 @NgModule({
   imports: [
     CommonModule,
-    AngularFireModule.initializeApp(firebaseConfig, firebaseAuthConfig),
+    /*AngularFireModule.initializeApp(firebaseConfig, firebaseAuthConfig),*/
     RouterModule.forRoot([])
   ],
   declarations: [

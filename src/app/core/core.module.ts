@@ -1,4 +1,3 @@
-/// <reference path="./../../../node_modules/firebase/firebase.d.ts" />
 
 
 import { NgModule, ModuleWithProviders }       from '@angular/core';
@@ -14,7 +13,8 @@ const firebaseConfig = {
     apiKey: "AIzaSyBp_ZDqoPygbPs7jMclrBSJ3a99t1Yvr1k",
     authDomain: "mixidea-91a20.firebaseapp.com",
     databaseURL: "https://mixidea-91a20.firebaseio.com",
-    storageBucket: ""
+    storageBucket: "mixidea-91a20.appspot.com",
+    messagingSenderId: "46563705700"
   };
 
 const firebaseAuthConfig = {
