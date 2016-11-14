@@ -261,9 +261,13 @@ export class SkywayService {
 
     if(!this.audio_available){
       this.livedebate_firebase.set_user_audio_unavailable(event_id, this.user_auth.own_user_id);
+    }else{
+      this.livedebate_firebase.set_user_audio_available(event_id, this.user_auth.own_user_id);
     }
     if(!this.video_available){
      this.livedebate_firebase.set_user_video_unavailable(event_id, this.user_auth.own_user_id);
+    }else{
+      this.livedebate_firebase.set_user_video_available(event_id, this.user_auth.own_user_id);
     }
   }
 

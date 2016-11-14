@@ -209,14 +209,24 @@ export class LiveDebateFirebaseService {
 
     const reference = '/event_related/livevideo-debate/' + event_id + '/user_env/video/' + user_id;
     this.save_firebase_data(reference, false);
+  }
 
+  set_user_video_available(event_id, user_id){
+
+    const reference = '/event_related/livevideo-debate/' + event_id + '/user_env/video/' + user_id;
+    this.remove_firebase_data(reference);
   }
 
   set_user_audio_unavailable(event_id, user_id){
 
     const reference = '/event_related/livevideo-debate/' + event_id + '/user_env/audio/' + user_id;
     this.save_firebase_data(reference, false);
+  }
 
+  set_user_audio_available(event_id, user_id){
+
+    const reference = '/event_related/livevideo-debate/' + event_id + '/user_env/audio/' + user_id;
+    this.remove_firebase_data(reference);
   }
 
 }
