@@ -13,6 +13,7 @@ declare var Peer:any;
 export class SkywayService {
 
   own_peer : any;
+  is_own_peer_opened = false;
   sfu_room : any;
   local_stream : any;
 
@@ -20,6 +21,7 @@ export class SkywayService {
   video_available: boolean;
   video_active : boolean;
   audio_active : boolean;
+  is_usermedia_set = false;
 
   local_video_stream_subject : BehaviorSubject<any>;
 
@@ -47,6 +49,7 @@ export class SkywayService {
                             width:{ideal:320},
                             height:{ideal: 180}
                           }};
+      this.is_own_peer_opened = true;
       const room_join = false;
       this.get_usermedia(constraints, room_join);
 
@@ -62,6 +65,7 @@ export class SkywayService {
                           height:{ideal: 180}
                         }};
     const room_join = false;
+    this.is_own_peer_opened = false;
     this.get_usermedia(constraints, room_join);
   }
 
@@ -76,6 +80,7 @@ export class SkywayService {
       this.local_video_stream_subject.next(video_stream);
       this.video_available = true;
       this.audio_available = true;
+      this.is_usermedia_set = true;
 
 
       const streamURL = URL.createObjectURL(video_stream);
@@ -102,6 +107,8 @@ export class SkywayService {
       this.local_stream= audio_stream;
       this.video_available = false;
       this.audio_available = true;
+      this.is_usermedia_set = true;
+
       if(this.sfu_room){
         this.sfu_room.replaceStream(this.local_stream)
       }
@@ -112,6 +119,7 @@ export class SkywayService {
       alert("you cannot use both aido and video, so you can just watch but cannot speak anything");
       this.video_available = false;
       this.audio_available = false;
+      this.is_usermedia_set = true;
       if(room_join){
         this.join_room_execute(type, event_id, team_name);
       }
@@ -281,6 +289,19 @@ export class SkywayService {
     this.sfu_room.unmute({"video":true,"audio":true})
   }
 
+  finalize(){
+    this.is_usermedia_set = false;
+    this.is_own_peer_opened = false;
 
+    if(this.sfu_room){
+      this.sfu_room.close();
+    }
+    this.own_peer = null;
+    if(this.room_data_subject){
+      this.room_data_subject.unsubscribe();
+      this.room_data_subject = null;
+    }
+    
+  }
 
 }

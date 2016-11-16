@@ -16,6 +16,7 @@ import { EnvironmentCheckComponent } from './environment-check/environment-check
 import { LivevideoDebateRootComponent } from './livevideo-debate-root.component';
 
 import {SkywayService} from './service/skyway.service';
+import {EnvironmentGuardService} from './service/environment-guard.service';
 import { UserVideoComponent } from './common/user-video/user-video.component';
 import { MotionComponent } from './common/motion/motion.component';
 import { PreparationDocumentComponent } from './common/preparation_document/preparation-document/preparation-document.component';
@@ -76,6 +77,6 @@ import { UserVideoIconComponent } from './common/user-video-icon/user-video-icon
     LeftPanelComponent,
     UserVideoIconComponent
   ],
-  providers: [LiveDebateFirebaseService, SkywayService]
+  providers: [LiveDebateFirebaseService, SkywayService, EnvironmentGuardService]
 })
 export class LiveVideoDebateModule {}

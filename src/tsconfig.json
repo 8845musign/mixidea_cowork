@@ -4,8 +4,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["es6", "dom"],
-/*    "mapRoot": "./mixidea/staging",*/
-    "mapRoot": "./",
+    "mapRoot": "./", 
     "module": "es6",
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",

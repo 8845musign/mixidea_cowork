@@ -6,6 +6,7 @@ import { IntroductionLayoutComponent } from './introduction/introduction-layout/
 import { LivevideoDebateRootComponent } from './livevideo-debate-root.component';
 
 import { EnvironmentCheckComponent } from './environment-check/environment-check.component';
+import {EnvironmentGuardService} from './service/environment-guard.service';
 
 
 @NgModule({
@@ -16,7 +17,10 @@ import { EnvironmentCheckComponent } from './environment-check/environment-check
         path: 'livevideo-debate',
         component: LivevideoDebateRootComponent,
         children:[
-          { path: 'game/:id', component: LivevideoDebateContainerComponent},
+          { path: 'game/:id',
+           component: LivevideoDebateContainerComponent,
+           canActivate: [EnvironmentGuardService]
+          },
           { path: 'environment_check/:id', component: EnvironmentCheckComponent}
         ]
       }
