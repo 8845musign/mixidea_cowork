@@ -58,6 +58,7 @@ export class LivevideoDebateContainerComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    console.log("--------- livevideo debate container ngoninit ---------")
     this.event_id = this.route.snapshot.params['id'];
 
     const event_item = this.af.database.object('/event_related/livevideo-debate/' + this.event_id, { preserveSnapshot: true });
@@ -110,9 +111,6 @@ export class LivevideoDebateContainerComponent implements OnInit, OnDestroy {
 
 // user environment
       this.user_env = Object.assign({}, in_livevideo_obj.user_env);
-
-
-
       this.change_ref.markForCheck();
     })
 
@@ -132,7 +130,8 @@ export class LivevideoDebateContainerComponent implements OnInit, OnDestroy {
     if(this.event_item_subscription ){
       this.event_item_subscription.unsubscribe();
     }
-    
+    //this.skyway.close_room();
+    this.skyway.finalize();
   }
 
 }

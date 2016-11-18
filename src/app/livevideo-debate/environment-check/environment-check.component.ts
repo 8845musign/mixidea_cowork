@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit,ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit,ElementRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
 
 import { UserauthService} from './../../core/service/userauth.service';
@@ -11,7 +11,7 @@ import {SkywayService} from './../service/skyway.service';
   templateUrl: './environment-check.component.html',
   styleUrls: ['./environment-check.component.scss']
 })
-export class EnvironmentCheckComponent implements OnInit {
+export class EnvironmentCheckComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
                private router: Router
@@ -26,6 +26,7 @@ export class EnvironmentCheckComponent implements OnInit {
     this._el = this.el.nativeElement;
     this.evnet_id = this.route.snapshot.params['id'];
     console.log(this.evnet_id);
+    this.skyway.initialize();
 
   }
 
@@ -62,6 +63,8 @@ export class EnvironmentCheckComponent implements OnInit {
     this.skyway.switch_localstream_small();
   }
 
-
+  ngOnDestroy(){
+    
+  }
 
 }

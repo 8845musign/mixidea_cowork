@@ -5,6 +5,15 @@ import { UserauthService} from './../../core/service/userauth.service';
 import {ModelUserService} from './../../core/service/model-user.service';
 import {LiveDebateFirebaseService} from './live-debate-firebase.service';
 
+
+import {SKYWAY_STATUS_NOPEER
+  ,SKYWAY_STATUS_UNDER_PEERINIT
+  ,SKYWAY_STATUS_PEERSET
+  ,SKYWAY_STATUS_UNDER_ROOMINIT
+  ,SKYWAY_STATUS_IN_ROOM} from './../interface-livedebate/status'
+
+
+
 declare var navigator:any;
 declare var Peer:any;
 
@@ -24,7 +33,9 @@ export class SkywayService {
   is_usermedia_set = false;
 
   local_video_stream_subject : BehaviorSubject<any>;
+  skyway_status = SKYWAY_STATUS_NOPEER;
 
+  room_data_subject
 
 
   constructor(private user_auth : UserauthService,
@@ -32,30 +43,37 @@ export class SkywayService {
               private livedebate_firebase: LiveDebateFirebaseService) {
 
     this.local_video_stream_subject = new BehaviorSubject(null);
-
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    const user_id = this.user_auth.own_user.id;
 
-    this.own_peer = new Peer(user_id, {
+
+  }
+
+  initialize(event_id?, in_roomname?){
+    console.log("<<skyway service API>> Initialization ");
+
+    this.room_data_subject = new BehaviorSubject(this.room_data);
+
+    console.log("<<skyway operation>>new peer");
+    this.set_skyway_status(SKYWAY_STATUS_UNDER_PEERINIT);
+    this.own_peer = new Peer(this.user_auth.own_user.id, {
       key: '1ea20ebb-c109-4262-b9b8-f2afed75e3af',
 //        key: '63899577-16cc-4fdb-9a4d-ad3ace362cde',
       debug:3
     });
-
     this.own_peer.on('open', ()=>{
-      console.log("connection is established with peer id: " , this.own_peer.id);
+      console.log("<<skyway peer event>> open : peer id ", this.own_peer.id);
       const constraints = { audio:true,
                           video: {
                             width:{ideal:320},
                             height:{ideal: 180}
                           }};
       this.is_own_peer_opened = true;
-      const room_join = false;
-      this.get_usermedia(constraints, room_join);
+      this.get_usermedia(constraints, event_id, in_roomname);
 
     })
 
-    this.own_peer.on('error', ()=>{
+    this.own_peer.on('error', (err)=>{
+      console.log("<<skyway peer event>>peer error", err);
       alert("peer error");
     })
 
@@ -66,16 +84,20 @@ export class SkywayService {
                         }};
     const room_join = false;
     this.is_own_peer_opened = false;
-    this.get_usermedia(constraints, room_join);
+    this.get_usermedia(constraints, event_id, in_roomname);
+
+  }
+
+  set_skyway_status(in_status){
+    this.skyway_status = in_status;
   }
 
 
-  get_usermedia(constraints : any, room_join = false, 
-                type? :string, event_id?: string, team_name? : string){
+  get_usermedia(constraints : any, event_id?: string, in_roomname? : string){
 
     const promise = navigator.mediaDevices.getUserMedia(constraints);
     promise.then((video_stream)=>{
-      console.log("accessing video and audio has been approved");
+      console.log(">>usermedia<< get_usermedia videoaudio approved");
       this.local_stream= video_stream;
       this.local_video_stream_subject.next(video_stream);
       this.video_available = true;
@@ -89,21 +111,22 @@ export class SkywayService {
       if(this.sfu_room){
         this.sfu_room.replaceStream(this.local_stream)
       }
-      if(room_join){
-        this.join_room_execute(type, event_id, team_name);
+      if(in_roomname){
+        this.join_room_execute(event_id, in_roomname);
       }
 
     }).catch(()=>{
-      this.get_usermedia_audio(room_join, type, event_id, team_name);
+      console.log(">>usermedia<< get_usermedia_videoaudio failed");
+      this.get_usermedia_audio(event_id, in_roomname);
     })
   }
 
-  get_usermedia_audio(room_join = false, type? :string, event_id?: string, team_name? : string){
+  get_usermedia_audio(event_id?: string, in_roomname? : string){
     const constraints = { audio:true,
                           video: false};
     const promise = navigator.mediaDevices.getUserMedia(constraints);
     promise.then((audio_stream)=>{
-      console.log("accessing audio has been approved");
+      console.log(">>usermedia<< get_usermedia_audio approved");
       this.local_stream= audio_stream;
       this.video_available = false;
       this.audio_available = true;
@@ -112,30 +135,30 @@ export class SkywayService {
       if(this.sfu_room){
         this.sfu_room.replaceStream(this.local_stream)
       }
-      if(room_join){
-        this.join_room_execute(type, event_id, team_name);
+      if(in_roomname){
+        this.join_room_execute( event_id, in_roomname);
       }
     }).catch(()=>{
+      console.log(">>usermedia<< get_usermedia_audio failed");
       alert("you cannot use both aido and video, so you can just watch but cannot speak anything");
       this.video_available = false;
       this.audio_available = false;
       this.is_usermedia_set = true;
-      if(room_join){
-        this.join_room_execute(type, event_id, team_name);
+      if(in_roomname){
+        this.join_room_execute( event_id, in_roomname);
       }
     })
   }
 
   switch_localstream_small(){
-
+     console.log(">>skyway service API<< switch_localstream_small ");
       const constraints = { audio:true,
                           video: {
                             width:{ideal:100},
                             height:{ideal: 100},
                             frameRate: { ideal: 2}
                           }};
-    const room_join = false;
-    this.get_usermedia(constraints, room_join);
+    this.get_usermedia(constraints);
  
   }
   
@@ -143,17 +166,8 @@ export class SkywayService {
 
   middle_process = false;
 
-  join_room(type :string, event_id: string, team_name : string){
-    
-    this.join_room_execute(type, event_id,  team_name );
-
-  }
-
-  join_room_execute(type :string, event_id: string, team_name : string){
-
-
-    this.close_room();
-
+  public join_room(type :string, event_id: string, team_name : string){
+    console.log("<<skyway service API>> join_room ");
     let room_name = ''
     if(type=='main'){
       room_name = 'mixidea_' + event_id + '_main';
@@ -163,24 +177,35 @@ export class SkywayService {
       return;
     }
 
+    this.join_room_execute(event_id, room_name);
+
+  }
+
+  private join_room_execute(event_id: string, in_room_name : string){
+
+
+    this.close_room();
+
     this.set_user_env(event_id);
 
 
-   this.sfu_room = this.own_peer.joinRoom(room_name, {mode: 'sfu', stream: this.local_stream })
-
+   this.sfu_room = this.own_peer.joinRoom(in_room_name, {mode: 'sfu', stream: this.local_stream })
+   console.log("<<skyway operation>>join room :room_name", in_room_name);
 
     this.sfu_room.on('open', ()=>{
-      console.log("---you have enter the room now---");
+      console.log("<<<<skyway room event>>>> open");
       this.middle_process = false;
       this.set_peer_users();
     });
 
     this.sfu_room.on('close', ()=>{
+      console.log("<<<<skyway room event>>>> closed");
       alert("room is closed");
     });
 
-    this.sfu_room.on('error', ()=>{
-      console.log(" error has happening");
+    this.sfu_room.on('error', (err)=>{
+      console.log(" <<<<skyway room event>>>> error");
+      console.log(err);
       this.middle_process = false;
     });
 
@@ -190,7 +215,7 @@ export class SkywayService {
         this.add_stream_on_roomuser(peerId, streamURL);
 
 
-        console.log("---stream is detected----");
+        console.log("<<<<skyway room event>>>>stream is detected");
         console.log("peer id" , peerId);
         console.log("url", streamURL);
     })
@@ -199,36 +224,28 @@ export class SkywayService {
         const peerId = stream.peerId;
         this.remove_stream_from_roomuser(peerId);
 
-        console.log("---stream is removed----");
+        console.log("<<<<skyway room event>>>>stream is removed");
         console.log("peer id" , peerId);
     })
 
     this.sfu_room.on('peerJoin', (peerId)=>{
       this.user_model.add_user(peerId);
-      console.log("----user entered the video call ---: ", peerId);
+      console.log("<<<<skyway room event>>>>peer join ---: ", peerId);
       this.set_peer_users();
     });
 
     this.sfu_room.on('peerLeave', (peerId)=>{
-      console.log("----user leave the video call ----", peerId);
+      console.log("<<<<skyway room event>>>>peer leave ----", peerId);
       this.set_peer_users();
     });
   }
 
-
-  close_room(){
-    if(this.sfu_room){
-      this.sfu_room.close();
-      this.sfu_room = null;
-    }
-  }
 
 
   room_data = {
     room_users:[],
     video_data:{}
   };
-  room_data_subject = new BehaviorSubject(this.room_data);
 
 
   private set_peer_users(){
@@ -289,14 +306,24 @@ export class SkywayService {
     this.sfu_room.unmute({"video":true,"audio":true})
   }
 
-  finalize(){
+  public close_room(){
+    if(this.sfu_room){
+      console.log("<<skyway operation>>close room");
+      this.sfu_room.close();
+      this.sfu_room = null;
+    }
+  }
+
+
+  public finalize(){
+    console.log("<<skyway service API>> finalize ");
     this.is_usermedia_set = false;
     this.is_own_peer_opened = false;
 
-    if(this.sfu_room){
-      this.sfu_room.close();
-    }
-    this.own_peer = null;
+    this.close_room();
+    console.log("<<skyway operation>>destroy peer");
+    this.own_peer.destroy();
+    //this.own_peer = null;
     if(this.room_data_subject){
       this.room_data_subject.unsubscribe();
       this.room_data_subject = null;
