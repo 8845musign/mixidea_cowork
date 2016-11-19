@@ -67,9 +67,19 @@
         [deb_style]="deb_style"
         [participants_team]="participants_team">
         </app-team-member>
-      <!-- <input type="button" (click)="goto_reflection()" value="goto_reflection"> -->
+      <input type="button" (click)="goto_reflection()" value="goto_reflection">
   </div>
 
 
   </div>
 </div>
+
+
+<span *ngFor="let user_id of room_users">
+    {{user_id}}
+    <app-user-audio 
+         [user_id]="user_id"
+         [video_data]="video_data"
+         [user_env]="user_env"
+         [room_users]="room_users"></app-user-audio>
+</span>

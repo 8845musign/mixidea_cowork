@@ -38,6 +38,7 @@ import { ReflectionLayoutComponent } from './reflection/reflection-layout/reflec
 import { PrepTeamMemberComponent } from './preparation/prep-team-member/prep-team-member.component';
 import { LeftPanelComponent } from './debate/left-panel/left-panel.component';
 import { UserVideoIconComponent } from './common/user-video-icon/user-video-icon.component';
+import { UserAudioComponent } from './common/user-audio/user-audio.component';
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { UserVideoIconComponent } from './common/user-video-icon/user-video-icon
     TeamMemberComponent,
     PrepTeamMemberComponent,
     LeftPanelComponent,
-    UserVideoIconComponent
+    UserVideoIconComponent,
+    UserAudioComponent
   ],
   providers: [LiveDebateFirebaseService, SkywayService, EnvironmentGuardService]
 })

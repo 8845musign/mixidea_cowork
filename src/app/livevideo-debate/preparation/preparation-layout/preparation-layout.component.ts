@@ -11,6 +11,9 @@ import {Observable} from 'rxjs';
 import {LiveDebateFirebaseService} from './../../service/live-debate-firebase.service';
 import {STATUS_DEBATE} from './../../interface-livedebate/status'
 
+import {SkywayService} from './../../service/skyway.service';
+
+
 interface Preparation_Document {
   intro: any,
   argument: any
@@ -57,10 +60,12 @@ export class PreparationLayoutComponent implements OnInit, Input, OnChanges {
 
   constructor(private af: AngularFire,
               private livedebate_firebase: LiveDebateFirebaseService,
-              private change_ref: ChangeDetectorRef) { }
+              private change_ref: ChangeDetectorRef,
+              private skyway : SkywayService) { }
 
   ngOnInit() {
 
+    this.skyway.join_room('preparation', this.event_id ,this.current_prep_team);
 
     const source = Observable.interval(1000).map(()=>{
       const current_time = new Date();

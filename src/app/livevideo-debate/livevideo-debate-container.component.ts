@@ -123,7 +123,7 @@ export class LivevideoDebateContainerComponent implements OnInit, OnDestroy {
       this.change_ref.markForCheck();
     })
 
-    this.skyway.join_room('main', this.event_id ,null);
+//    this.skyway.join_room('main', this.event_id ,null);
   }
 
   ngOnDestroy(){

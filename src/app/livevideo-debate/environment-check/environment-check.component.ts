@@ -21,6 +21,7 @@ export class EnvironmentCheckComponent implements OnInit, OnDestroy {
 
   evnet_id;
   _el;
+  video_container
 
   ngOnInit() {
     this._el = this.el.nativeElement;
@@ -36,12 +37,13 @@ export class EnvironmentCheckComponent implements OnInit, OnDestroy {
     this.skyway.local_video_stream_subject.subscribe((stream)=>{
       console.log("local video stream subscription");
       if(stream){
-        const video_container = this._el.getElementsByClassName("own_video")[0];
-        video_container.innerHTML = "";
+        this.video_container = this._el.getElementsByClassName("own_video")[0];
+        this.video_container.innerHTML = "";
         const video_element = document.createElement("video");
         video_element.autoplay = true;
         video_element.src= window.URL.createObjectURL(stream);
-        video_container.insertBefore(video_element, null)
+        video_element.muted = true; //own voice is heard when enveironment is checked.
+        this.video_container.insertBefore(video_element, null)
         console.log(video_element.src);
         
       }
@@ -64,7 +66,7 @@ export class EnvironmentCheckComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    
+    this.video_container = null;
   }
 
 }

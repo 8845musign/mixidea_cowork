@@ -34,8 +34,10 @@ export class SkywayService {
 
   local_video_stream_subject : BehaviorSubject<any>;
   skyway_status = SKYWAY_STATUS_NOPEER;
+  own_streamURL = null;
 
   room_data_subject
+  current_room_name = "";
 
 
   constructor(private user_auth : UserauthService,
@@ -105,13 +107,13 @@ export class SkywayService {
       this.is_usermedia_set = true;
 
 
-      const streamURL = URL.createObjectURL(video_stream);
-      this.add_stream_on_roomuser(this.user_auth.own_user.id, streamURL);
+      this.own_streamURL = URL.createObjectURL(video_stream);
+      this.add_stream_on_roomuser(this.user_auth.own_user.id, this.own_streamURL);
 
       if(this.sfu_room){
         this.sfu_room.replaceStream(this.local_stream)
       }
-      if(in_roomname){
+      if(in_roomname  && in_roomname != this.current_room_name){
         this.join_room_execute(event_id, in_roomname);
       }
 
@@ -135,7 +137,7 @@ export class SkywayService {
       if(this.sfu_room){
         this.sfu_room.replaceStream(this.local_stream)
       }
-      if(in_roomname){
+      if(in_roomname && in_roomname != this.current_room_name){
         this.join_room_execute( event_id, in_roomname);
       }
     }).catch(()=>{
@@ -177,30 +179,31 @@ export class SkywayService {
       return;
     }
 
+    if(room_name == this.current_room_name){
+      return;
+    }
+    this.set_user_env(event_id);
+    this.close_room();
     this.join_room_execute(event_id, room_name);
 
   }
 
   private join_room_execute(event_id: string, in_room_name : string){
 
-
-    this.close_room();
-
-    this.set_user_env(event_id);
-
-
    this.sfu_room = this.own_peer.joinRoom(in_room_name, {mode: 'sfu', stream: this.local_stream })
    console.log("<<skyway operation>>join room :room_name", in_room_name);
 
+    this.current_room_name = in_room_name;
     this.sfu_room.on('open', ()=>{
-      console.log("<<<<skyway room event>>>> open");
+      console.log("<<<<skyway room event>>>> open : roomnae: ", this.current_room_name);
       this.middle_process = false;
-      this.set_peer_users();
+      // this.set_peer_users();
     });
 
     this.sfu_room.on('close', ()=>{
       console.log("<<<<skyway room event>>>> closed");
-      alert("room is closed");
+      this.current_room_name = null;
+   //   alert("room is closed");
     });
 
     this.sfu_room.on('error', (err)=>{
@@ -215,8 +218,7 @@ export class SkywayService {
         this.add_stream_on_roomuser(peerId, streamURL);
 
 
-        console.log("<<<<skyway room event>>>>stream is detected");
-        console.log("peer id" , peerId);
+        console.log("<<<<skyway room event>>>>stream is detected: peeerid", peerId);
         console.log("url", streamURL);
     })
 
@@ -224,23 +226,21 @@ export class SkywayService {
         const peerId = stream.peerId;
         this.remove_stream_from_roomuser(peerId);
 
-        console.log("<<<<skyway room event>>>>stream is removed");
+        console.log("<<<<skyway room event>>>>stream is removed: peeerid", peerId);
         console.log("peer id" , peerId);
     })
 
     this.sfu_room.on('peerJoin', (peerId)=>{
       this.user_model.add_user(peerId);
       console.log("<<<<skyway room event>>>>peer join ---: ", peerId);
-      this.set_peer_users();
+      //this.set_peer_users();
     });
 
     this.sfu_room.on('peerLeave', (peerId)=>{
       console.log("<<<<skyway room event>>>>peer leave ----", peerId);
-      this.set_peer_users();
+      //this.set_peer_users();
     });
   }
-
-
 
   room_data = {
     room_users:[],
@@ -248,6 +248,7 @@ export class SkywayService {
   };
 
 
+/*
   private set_peer_users(){
 
       this.own_peer.listAllPeers((list)=>{
@@ -258,13 +259,28 @@ export class SkywayService {
         this.room_data_subject.next(this.room_data);
       })
   }
+*/
 
   private add_stream_on_roomuser(peerId, stream){
+
+    if(!peerId){
+      return;
+    }
 
     const updated_video_obj = Object.assign({}, this.room_data.video_data)
     updated_video_obj[peerId] = stream;
     const updated_video_parent = {video_data: updated_video_obj};
-    this.room_data = Object.assign({}, this.room_data,updated_video_parent);
+
+    let updated_roomusers_parent = {}; 
+    const current_roomusers = this.room_data.room_users;
+    if(current_roomusers.indexOf(peerId) == -1){
+      updated_roomusers_parent = {room_users: [...current_roomusers, peerId]};
+    }else{
+      updated_roomusers_parent = {room_users: current_roomusers};
+    }
+    
+    this.room_data = Object.assign({}, this.room_data,updated_video_parent, updated_roomusers_parent);
+
     console.log("<<<<<<<room data>>>>>>>>");
     console.log(this.room_data);
     this.room_data_subject.next(this.room_data);
@@ -276,9 +292,31 @@ export class SkywayService {
       delete updated_video_obj[peerId];
     }
     const updated_video_parent = {video_data: updated_video_obj};
-    this.room_data = Object.assign({}, this.room_data,updated_video_parent);
+
+    const updated_roomusers = this.room_data.room_users.filter(function(element){return element !=peerId});
+    const updated_roomusers_parent = {room_users: updated_roomusers};
+
+    this.room_data = Object.assign({}, this.room_data,updated_video_parent, updated_roomusers_parent);
     console.log("<<<<<<<room data>>>>>>>>");
     console.log(this.room_data);
+    this.room_data_subject.next(this.room_data);
+  }
+
+  private remove_all_room_data_except_yourself(){
+    this.room_data = {
+      room_users:[this.user_auth.own_user_id],
+      video_data:{}
+    };
+    if(this.local_stream){
+      this.room_data.video_data[this.user_auth.own_user_id] = this.own_streamURL;
+    }
+    this.room_data_subject.next(this.room_data);
+  }
+  private remove_all_room_data(){
+    this.room_data = {
+      room_users:[],
+      video_data:{}
+    };
     this.room_data_subject.next(this.room_data);
   }
 
@@ -307,13 +345,13 @@ export class SkywayService {
   }
 
   public close_room(){
+    this.remove_all_room_data_except_yourself()
     if(this.sfu_room){
       console.log("<<skyway operation>>close room");
       this.sfu_room.close();
-      this.sfu_room = null;
+        this.sfu_room = null;
     }
   }
-
 
   public finalize(){
     console.log("<<skyway service API>> finalize ");
@@ -321,14 +359,15 @@ export class SkywayService {
     this.is_own_peer_opened = false;
 
     this.close_room();
+    this.remove_all_room_data();
     console.log("<<skyway operation>>destroy peer");
     this.own_peer.destroy();
     //this.own_peer = null;
+    this.own_streamURL = null;
     if(this.room_data_subject){
       this.room_data_subject.unsubscribe();
       this.room_data_subject = null;
     }
-    
   }
 
 }

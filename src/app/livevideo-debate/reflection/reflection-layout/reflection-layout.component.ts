@@ -3,6 +3,7 @@ import {LiveDebateFirebaseService} from './../../service/live-debate-firebase.se
 
 import {STATUS_INTRO} from './../../interface-livedebate/status'
 
+import {SkywayService} from './../../service/skyway.service';
 
 @Component({
   selector: 'app-reflection-layout',
@@ -13,9 +14,12 @@ export class ReflectionLayoutComponent implements OnInit {
 
   @Input() event_id;
 
-  constructor(private livedebate_firebase: LiveDebateFirebaseService) { }
+  constructor(
+    private livedebate_firebase: LiveDebateFirebaseService,
+    private skyway : SkywayService) { }
 
   ngOnInit() {
+    this.skyway.join_room('main', this.event_id ,null);
   }
 
   goback_introduction(){

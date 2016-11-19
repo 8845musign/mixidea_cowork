@@ -11,6 +11,7 @@ import {LiveDebateFirebaseService} from './../../service/live-debate-firebase.se
 
 import {STATUS_PREP} from './../../interface-livedebate/status'
 
+import {SkywayService} from './../../service/skyway.service';
 
 @Component({
   selector: 'app-introduction-layout',
@@ -48,9 +49,12 @@ export class IntroductionLayoutComponent implements OnInit, OnChanges {
   users_not_involved_team = [];
 
   constructor(private user_auth : UserauthService, 
-              private livedebate_firebase: LiveDebateFirebaseService) { }
+              private livedebate_firebase: LiveDebateFirebaseService,
+              private skyway : SkywayService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.skyway.join_room('main', this.event_id ,null);
+  }
 
   ngOnChanges(){
     console.log("introduction layout on change has been called");

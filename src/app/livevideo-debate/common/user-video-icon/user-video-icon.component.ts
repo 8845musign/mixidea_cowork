@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, OnChanges, ElementRef, ChangeDetectorRef,NgZone, OnDestroy } from '@angular/core';
 
+import { UserauthService} from './../../../core/service/userauth.service';
+
 @Component({
   selector: 'app-user-video-icon',
   templateUrl: './user-video-icon.component.html',
@@ -26,7 +28,8 @@ export class UserVideoIconComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private el: ElementRef,
              private change_ref: ChangeDetectorRef,
-             private _ngZone: NgZone) { }
+             private _ngZone: NgZone,
+             private user_auth : UserauthService) { }
 
   ngOnInit() {
     this._el = this.el.nativeElement;
@@ -82,6 +85,15 @@ export class UserVideoIconComponent implements OnInit, OnChanges, OnDestroy {
     video_element.src= this.video_src
     video_element.width=100
     video_element.height=100
+
+    if(this.user_id == this.user_auth.own_user.id){
+      video_element.muted = true;
+      console.log("test test true");
+    }else{
+      video_element.muted = false;
+      console.log("test test false");
+    }
+
     video_container.insertBefore(video_element, null)
     console.log(video_element.src);
     this.change_ref.detectChanges();
