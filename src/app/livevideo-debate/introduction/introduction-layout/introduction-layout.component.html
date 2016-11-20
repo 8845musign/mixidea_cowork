@@ -14,7 +14,7 @@
               [team_member]="participants_team[TEAM_GOV]" 
               [current_own_team]="current_own_team"
               [is_in_team_myself]="is_in_team_myself"
-              [video_data]="video_data"
+              [stream_data]="stream_data"
               [user_env]="user_env"
               [room_users]="room_users"></app-select-team>
           </div>
@@ -25,7 +25,7 @@
               [team_member]="participants_team[TEAM_OPP]" 
               [current_own_team]="current_own_team"
               [is_in_team_myself]="is_in_team_myself"
-              [video_data]="video_data"
+              [stream_data]="stream_data"
               [user_env]="user_env"
               [room_users]="room_users"></app-select-team>
           </div>
@@ -54,7 +54,7 @@
       <div style="margin-top: 7px;">
         <span *ngFor="let user_id of users_not_involved_team">
           <app-user-video-icon [user_id]="user_id" 
-                               [video_data]="video_data"
+                               [stream_data]="stream_data"
                                [user_env]="user_env"
                                [room_users]="room_users"></app-user-video-icon>
         </span>
@@ -67,5 +67,5 @@
 </div>
 
     <br>
-    video data {{video_data | json}} <br>
+    video data {{stream_data | json}} <br>
     users_not_involved_team {{users_not_involved_team | json}} <br>

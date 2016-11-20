@@ -244,7 +244,7 @@ export class SkywayService {
 
   room_data = {
     room_users:[],
-    video_data:{}
+    stream_data:{}
   };
 
 
@@ -267,9 +267,9 @@ export class SkywayService {
       return;
     }
 
-    const updated_video_obj = Object.assign({}, this.room_data.video_data)
+    const updated_video_obj = Object.assign({}, this.room_data.stream_data)
     updated_video_obj[peerId] = stream;
-    const updated_video_parent = {video_data: updated_video_obj};
+    const updated_video_parent = {stream_data: updated_video_obj};
 
     let updated_roomusers_parent = {}; 
     const current_roomusers = this.room_data.room_users;
@@ -287,11 +287,11 @@ export class SkywayService {
   }
 
   private remove_stream_from_roomuser(peerId){
-    const updated_video_obj = Object.assign({}, this.room_data.video_data);
+    const updated_video_obj = Object.assign({}, this.room_data.stream_data);
     if(updated_video_obj[peerId]){
       delete updated_video_obj[peerId];
     }
-    const updated_video_parent = {video_data: updated_video_obj};
+    const updated_video_parent = {stream_data: updated_video_obj};
 
     const updated_roomusers = this.room_data.room_users.filter(function(element){return element !=peerId});
     const updated_roomusers_parent = {room_users: updated_roomusers};
@@ -305,17 +305,17 @@ export class SkywayService {
   private remove_all_room_data_except_yourself(){
     this.room_data = {
       room_users:[this.user_auth.own_user_id],
-      video_data:{}
+      stream_data:{}
     };
     if(this.local_stream){
-      this.room_data.video_data[this.user_auth.own_user_id] = this.own_streamURL;
+      this.room_data.stream_data[this.user_auth.own_user_id] = this.own_streamURL;
     }
     this.room_data_subject.next(this.room_data);
   }
   private remove_all_room_data(){
     this.room_data = {
       room_users:[],
-      video_data:{}
+      stream_data:{}
     };
     this.room_data_subject.next(this.room_data);
   }

@@ -17,7 +17,7 @@ export class SelectTeamComponent implements OnInit, OnChanges {
   @Input() team_member;
   @Input() current_own_team;
   @Input() is_in_team_myself;
-  @Input() video_data;
+  @Input() stream_data;
   @Input() user_env;
   @Input() room_users
 
@@ -41,7 +41,7 @@ export class SelectTeamComponent implements OnInit, OnChanges {
     console.log(this.team_name);
     console.log(this.team_member);
     this.team_member = this.team_member || {};
-    this.video_data = this.video_data || {};
+    this.stream_data = this.stream_data || {};
 
     if(this.team_member[this.user_auth.own_user.id]){
       this.is_my_team = true;

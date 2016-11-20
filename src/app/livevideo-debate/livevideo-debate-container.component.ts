@@ -28,7 +28,7 @@ export class LivevideoDebateContainerComponent implements OnInit, OnDestroy {
   STATUS_REFLECTION = STATUS_REFLECTION;
   
   event_id = null;
-  video_data={};
+  stream_data={};
   user_env = {};
   
   room_users = [];
@@ -118,7 +118,7 @@ export class LivevideoDebateContainerComponent implements OnInit, OnDestroy {
     this.skyway.room_data_subject.subscribe((room_data)=>{
       console.log("room data is updated", room_data)
       this.room_users = room_data.room_users || [];
-      this.video_data = room_data.video_data || {};
+      this.stream_data = room_data.stream_data || {};
       
       this.change_ref.markForCheck();
     })

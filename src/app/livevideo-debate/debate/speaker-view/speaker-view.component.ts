@@ -22,7 +22,7 @@ export class SpeakerViewComponent implements OnInit {
   @Input() main_speaker_id;
   @Input() poi_speaker_id;
   @Input() poi_candidates_id_arr;
-  @Input() video_data;
+  @Input() stream_data;
   @Input() user_env;
   @Input() room_users
   @Input() is_main_speaker_yourself;

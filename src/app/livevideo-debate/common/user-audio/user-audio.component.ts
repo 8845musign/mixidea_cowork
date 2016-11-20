@@ -10,7 +10,7 @@ import { UserauthService} from './../../../core/service/userauth.service';
 })
 export class UserAudioComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() video_data
+  @Input() stream_data
   @Input() user_env
   @Input() room_users
   @Input() user_id
@@ -28,8 +28,8 @@ export class UserAudioComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    this.video_data = this.video_data || {};
-    this.audio_src = this.video_data[this.user_id];
+    this.stream_data = this.stream_data || {};
+    this.audio_src = this.stream_data[this.user_id];
     const user_env = this.user_env || {};
     const audio_env = user_env.audio || {};
     this.room_users = this.room_users || [];
