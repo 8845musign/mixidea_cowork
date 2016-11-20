@@ -24,11 +24,11 @@ export class ModelUserService {
 
    get_user = function(userid:string){
 
-    if(this.userlist_obj[userid]){
-      return this.userlist_obj[userid];
-    }else{
-      return null;
-    }
+      if(this.userlist_obj[userid]){
+        return this.userlist_obj[userid];
+      }else{
+        return null;
+      }
 
    }
 
