@@ -1,5 +1,38 @@
 <div>
 　 user {{user_id}}
+
+  <span [ngSwitch]="user_type">
+     <span *ngSwitchCase="NOT_LOGIN_USER">
+       NOT_LOGIN_USER
+      <div class="img_container">img
+        <app-user-link [user_id]="user_id" [type]="'video_replacement'" ></app-user-link>
+      </div>
+     </span>
+     
+     <span *ngSwitchCase="LOGIN_USER_without_stream">
+       LOGIN_USER_without_stream
+       <div class="img_container">
+        <app-user-link [user_id]="user_id" [type]="'video_replacement'" ></app-user-link>
+       </div>
+     </span>
+
+     <span *ngSwitchCase="LOGIN_USER_with_audio">
+       LOGIN_USER_with_audio
+       <div class="img_container">
+        <app-user-link [user_id]="user_id" [type]="'video_replacement'" ></app-user-link>
+       </div>
+       <div class="audio_container"></div>
+     </span>
+
+     <span *ngSwitchCase="LOGIN_USER_with_video">
+       LOGIN_USER_with_video
+       <div class="video_container"></div>
+     </span>
+
+  </span>
+
+<!--
+
   <div class="video_user_container">
     <div class="video_container"></div>
     <div class="img_container">img
@@ -7,5 +40,5 @@
     </div>
   </div>
 
-
+-->
 </div>

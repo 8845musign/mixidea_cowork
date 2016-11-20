@@ -134,6 +134,10 @@ export class SkywayService {
       this.audio_available = true;
       this.is_usermedia_set = true;
 
+
+      this.own_streamURL = URL.createObjectURL(audio_stream);
+      this.add_stream_on_roomuser(this.user_auth.own_user.id, this.own_streamURL);
+
       if(this.sfu_room){
         this.sfu_room.replaceStream(this.local_stream)
       }
