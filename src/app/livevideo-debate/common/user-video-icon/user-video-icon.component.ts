@@ -153,7 +153,7 @@ export class UserVideoIconComponent implements OnInit, OnChanges, OnDestroy {
 
     video_container.insertBefore(video_element, null)
     console.log(video_element.src);
-    this.change_ref.detectChanges();
+    this.change_ref.markForCheck();
 
     this._ngZone.run(()=>{});
   }
@@ -184,7 +184,7 @@ export class UserVideoIconComponent implements OnInit, OnChanges, OnDestroy {
     audio_element.src= this.stream_src;
 
     audio_container.insertBefore(audio_element, null)
-    this.change_ref.detectChanges();
+    this.change_ref.markForCheck();
     this._ngZone.run(()=>{});
   }
 
