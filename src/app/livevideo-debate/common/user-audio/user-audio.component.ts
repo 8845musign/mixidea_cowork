@@ -6,7 +6,7 @@ import { UserauthService} from './../../../core/service/userauth.service';
 @Component({
   selector: 'app-user-audio',
   templateUrl: './user-audio.component.html',
-  styleUrls: ['./user-audio.component.css']
+  styleUrls: ['./user-audio.component.scss']
 })
 export class UserAudioComponent implements OnInit, OnChanges, OnDestroy {
 
