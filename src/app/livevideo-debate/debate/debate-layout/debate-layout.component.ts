@@ -42,6 +42,10 @@ export class DebateLayoutComponent implements OnInit {
   @Input() speech_log;
   @Input() motion;
   
+  DEBATE_STATUS_WAITING = DEBATE_STATUS_WAITING
+  DEBATE_STATUS_SPEECH_MAIN_SPEAKER = DEBATE_STATUS_SPEECH_MAIN_SPEAKER;
+  DEBATE_STATUS_SPEECH_POI = DEBATE_STATUS_SPEECH_POI;
+
   own_team : string;
   own_team_side = "no_side";
   next_speaker_role_num : number;

@@ -55,7 +55,7 @@ export class SkywayService {
 
     this.room_data_subject = new BehaviorSubject(this.room_data);
 
-    console.log("<<skyway operation>>new peer");
+    console.log("<<skyway operation>>new peer: with id: ", this.user_auth.own_user.id);
     this.set_skyway_status(SKYWAY_STATUS_UNDER_PEERINIT);
     this.own_peer = new Peer(this.user_auth.own_user.id, {
       key: '1ea20ebb-c109-4262-b9b8-f2afed75e3af',

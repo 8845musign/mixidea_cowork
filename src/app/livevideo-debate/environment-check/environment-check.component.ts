@@ -22,13 +22,23 @@ export class EnvironmentCheckComponent implements OnInit, OnDestroy {
   evnet_id;
   _el;
   video_container
+  own_user_subscription;
 
   ngOnInit() {
     this._el = this.el.nativeElement;
     this.evnet_id = this.route.snapshot.params['id'];
     console.log(this.evnet_id);
-    this.skyway.initialize();
-
+    if(this.user_auth.own_user.loggedIn){
+      this.skyway.initialize();
+    }else{
+      this.own_user_subscription =
+         this.user_auth.own_user_subject$
+          .filter( ()=>{return this.user_auth.own_user.loggedIn == true})
+          .take(1)
+          .subscribe(()=>{
+            this.skyway.initialize();
+          })
+    }
   }
 
   ngAfterViewInit(){
@@ -67,6 +77,9 @@ export class EnvironmentCheckComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.video_container = null;
+    if(this.own_user_subscription){
+      this.own_user_subscription.unsubscribe();
+    }
   }
 
 }

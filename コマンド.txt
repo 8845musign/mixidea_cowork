@@ -1,7 +1,7 @@
 
 ssh -i "/home/yuta/.ssh/mixidea_key.pem" ubuntu@ec2-52-91-8-237.compute-1.amazonaws.com
 
-sudo rsync -avz -e "ssh -i /home/yuta/.ssh/mixidea_key.pem" --exclude='assets/images/*' /home/yuta/development/Angular2/temp/mixidea_cowork/dist/* ubuntu@ec2-52-91-8-237.compute-1.amazonaws.com:/home/ubuntu/src/node_server/public
+sudo rsync -avz -e "ssh -i /home/yuta/.ssh/mixidea_key.pem" --exclude='assets/images/*' /home/yuta/development/Angular2/mixidea_cowork/dist/* ubuntu@ec2-52-91-8-237.compute-1.amazonaws.com:/home/ubuntu/src/node_server/public
 
 
 
