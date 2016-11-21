@@ -80,6 +80,34 @@ export class SoundPlayService {
     this.play(sound_type, sound_url)
   }
 
+  public PlayPreparationStart(){
+    console.log("play PreparationStar");
+    const sound_type="prep_start";
+    const sound_url = this.source_domain + 'audio/prep_start.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+  public PlayPrepFinishSpeechStart(){
+    console.log("play PrepFinishSpeechStart");
+    const sound_type="prep_finish";
+    const sound_url = this.source_domain + 'audio/prep_finish_speech_sart.mp3';
+    this.play(sound_type, sound_url);
+  }
+
+  public PlayAllSpeechOver(){
+    console.log("play AllSpeechOve");
+    const sound_type="allspeech_over";
+    const sound_url = this.source_domain + 'audio/all_seech_over.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+  public PlayIntroduction(){
+    console.log("play Introduction");
+    const sound_type="introduction";
+    const sound_url = this.source_domain + 'audio/introduction.mp3';
+    this.play(sound_type, sound_url)
+  }
+
 
   private play = (sound_type, sound_url)=>{
     if(this.bufferStorage[sound_type]){

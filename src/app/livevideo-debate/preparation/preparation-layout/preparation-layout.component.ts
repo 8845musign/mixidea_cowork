@@ -13,6 +13,7 @@ import {STATUS_DEBATE} from './../../interface-livedebate/status'
 
 import {SkywayService} from './../../service/skyway.service';
 
+import {SoundPlayService} from './../../service/sound-play.service'
 
 interface Preparation_Document {
   intro: any,
@@ -61,7 +62,8 @@ export class PreparationLayoutComponent implements OnInit, Input, OnChanges {
   constructor(private af: AngularFire,
               private livedebate_firebase: LiveDebateFirebaseService,
               private change_ref: ChangeDetectorRef,
-              private skyway : SkywayService) { }
+              private skyway : SkywayService,
+              private sound_play: SoundPlayService) { }
 
   ngOnInit() {
 
@@ -91,6 +93,7 @@ export class PreparationLayoutComponent implements OnInit, Input, OnChanges {
         this.change_ref.detectChanges()
       }
     )
+    this.sound_play.PlayPreparationStart();
   }
 
   ngOnChanges(){

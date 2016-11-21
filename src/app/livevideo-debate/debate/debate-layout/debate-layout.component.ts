@@ -21,6 +21,8 @@ import {STATUS_REFLECTION} from './../../interface-livedebate/status'
 
 import {SkywayService} from './../../service/skyway.service';
 
+import {SoundPlayService} from './../../service/sound-play.service'
+
 @Component({
   selector: 'app-debate-layout',
   templateUrl: './debate-layout.component.html',
@@ -79,10 +81,12 @@ export class DebateLayoutComponent implements OnInit {
   constructor(private change_ref: ChangeDetectorRef,
               private user_auth : UserauthService,
               private livedebate_firebase: LiveDebateFirebaseService,
-              private skyway : SkywayService) { }
+              private skyway : SkywayService,
+              private sound_play: SoundPlayService) { }
 
   ngOnInit() {
     this.skyway.join_room('main', this.event_id ,null);
+    this.sound_play.PlayPrepFinishSpeechStart();
   }
 
   ngOnChanges(){

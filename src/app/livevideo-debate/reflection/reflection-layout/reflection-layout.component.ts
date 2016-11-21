@@ -5,6 +5,8 @@ import {STATUS_INTRO} from './../../interface-livedebate/status'
 
 import {SkywayService} from './../../service/skyway.service';
 
+import {SoundPlayService} from './../../service/sound-play.service'
+
 @Component({
   selector: 'app-reflection-layout',
   templateUrl: './reflection-layout.component.html',
@@ -16,10 +18,12 @@ export class ReflectionLayoutComponent implements OnInit {
 
   constructor(
     private livedebate_firebase: LiveDebateFirebaseService,
-    private skyway : SkywayService) { }
+    private skyway : SkywayService,
+    private sound_play: SoundPlayService) { }
 
   ngOnInit() {
     this.skyway.join_room('main', this.event_id ,null);
+    this.sound_play.PlayAllSpeechOver();
   }
 
   goback_introduction(){
