@@ -13,6 +13,8 @@ import {DEBATE_STATUS_WAITING,
 
 import {Observable} from 'rxjs';
 
+import {SoundPlayService} from './../../service/sound-play.service'
+
 @Component({
   selector: 'app-controller',
   templateUrl: './controller.component.html',
@@ -48,7 +50,8 @@ export class ControllerComponent implements OnInit,OnChanges {
 
   constructor(private user_auth : UserauthService,
               private livedebate_firebase: LiveDebateFirebaseService,
-              private change_ref: ChangeDetectorRef) { }
+              private change_ref: ChangeDetectorRef,
+              private sound_play: SoundPlayService) { }
 
   ngOnInit() {
 
@@ -120,4 +123,10 @@ export class ControllerComponent implements OnInit,OnChanges {
     console.log("start debate");
   }
 
+  test_sound(){
+    this.sound_play.PlayPoi();
+  }
+  test_sound2(){
+    this.sound_play.PlaySpeechStart();
+  }
 }
