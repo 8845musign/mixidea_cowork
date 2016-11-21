@@ -15,8 +15,7 @@ export class SoundPlayService {
   　this.audio_context = new AudioContext();
     console.log("audio context constructor");
 
-   }
-
+  }
 
   public PlayPoi(){
     console.log("play poi");
@@ -32,8 +31,57 @@ export class SoundPlayService {
     this.play(sound_type, sound_url)
   }
 
+  public PlayTaken(){
+    console.log("play taken");
+    const sound_type="taken";
+    const sound_url = this.source_domain + 'audio/taken.mp3';
+    this.play(sound_type, sound_url)
+  }
 
-  play = (sound_type, sound_url)=>{
+  public PlayGoBackToSpeaker(){
+    console.log("play go back to speaker");
+    const sound_type="go_back_to";
+    const sound_url = this.source_domain + 'audio/gobacktospeaker.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+  public PlayHearHear(){
+    console.log("play hear hear");
+    const sound_type="hearhear";
+    const sound_url = this.source_domain + 'audio/hearhear.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+  public PlayShame(){
+    console.log("play shame");
+    const sound_type="shame";
+    const sound_url = this.source_domain + 'audio/shame.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+  public PlayOnePin(){
+    console.log("play one pin");
+    const sound_type="one_pin";
+    const sound_url = this.source_domain + 'audio/OnePin.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+  public PlayTwoPin(){
+    console.log("play two pin");
+    const sound_type="two_pin";
+    const sound_url = this.source_domain + 'audio/TwoPin.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+  public PlayThreePin(){
+    console.log("play ThreePin");
+    const sound_type="three_pin";
+    const sound_url = this.source_domain + 'audio/ThreePin.mp3';
+    this.play(sound_type, sound_url)
+  }
+
+
+  private play = (sound_type, sound_url)=>{
     if(this.bufferStorage[sound_type]){
       this.play_sound(this.bufferStorage[sound_type])
     }else{
@@ -45,7 +93,7 @@ export class SoundPlayService {
     }
   }
 
-  preload = (sound_type, sound_url)=>{
+  private preload = (sound_type, sound_url)=>{
     if(this.bufferStorage[sound_type]){
       console.log("already loaded");
     }else{
@@ -58,14 +106,14 @@ export class SoundPlayService {
   }
 
 
-  play_sound = (buffer)=>{
+  private play_sound = (buffer)=>{
     const source = this.audio_context.createBufferSource();
     source.buffer = buffer;
     source.connect(this.audio_context.destination);
     source.start(0);
   }
 
-  loadBuffer = (sound_url, sound_type, callback) => {
+  private loadBuffer = (sound_url, sound_type, callback) => {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", sound_url, true);
     xhr.responseType = "arraybuffer";
@@ -95,48 +143,3 @@ export class SoundPlayService {
   };
 
 }
-
-/*
-function BufferLoader(audio_context) {
-  this.audio_context = audio_context;
-  this.bufferStorage = {};
-}
-
-
-BufferLoader.prototype.loadBuffer = function(sound_url, sound_type, callback) {
-  // Load buffer asynchronously
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", sound_url, true);
-  xhr.responseType = "arraybuffer";
-  var that = this;
-
-  xhr.onload = function() {
-    // Asynchronously decode the audio file data in request.response
-    const sound_data = xhr.response
-    that.audio_context.decodeAudioData(
-      sound_data,
-      function(buffer) {
-        if (!buffer) {
-          console.log('error decoding file data: ' + sound_url);
-          return;
-        }
-        that.bufferStorage[sound_type] = buffer;
-        callback(buffer);
-      },
-      function(error) {
-        console.error('decodeAudioData error', error);
-      }
-    );
-  }
-  xhr.onerror = function() {
-    alert('BufferLoader: XHR error');
-  }
-  xhr.send();
-};
-
-*/
-/*
-BufferLoader.prototype.load = function(audio_url, sound_type, callback) {
-  this.loadBuffer(this.audio_url, this.buffer_name);
-};
-*/
