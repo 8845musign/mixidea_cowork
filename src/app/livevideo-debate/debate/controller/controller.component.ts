@@ -15,6 +15,9 @@ import {Observable} from 'rxjs';
 
 import {SoundPlayService} from './../../service/sound-play.service'
 
+import {RecordingService} from './../../service/recording.service';
+
+
 @Component({
   selector: 'app-controller',
   templateUrl: './controller.component.html',
@@ -51,7 +54,8 @@ export class ControllerComponent implements OnInit,OnChanges {
   constructor(private user_auth : UserauthService,
               private livedebate_firebase: LiveDebateFirebaseService,
               private change_ref: ChangeDetectorRef,
-              private sound_play: SoundPlayService) { }
+              private sound_play: SoundPlayService,
+              private recording: RecordingService) { }
 
   ngOnInit() {
 
@@ -98,12 +102,13 @@ export class ControllerComponent implements OnInit,OnChanges {
     console.log('speaker_obj', speaker_obj);
     this.livedebate_firebase.set_debate_speaker(this.event_id, speaker_obj);
     this.livedebate_firebase.start_speech(this.event_id, this.next_speaker_role_num, this.user_auth.own_user_id);
-
+    this.recording.record_start();
   }
 
   speech_finish(){
     this.livedebate_firebase.remove_speech_status(this.event_id);
     this.livedebate_firebase.complete_speech(this.event_id, this.main_speaker_role_num, this.speech_time_spent);
+    this.recording.record_finish();
   }
 
   poi(){
