@@ -23,6 +23,7 @@ import {SkywayService} from './../../service/skyway.service';
 
 import {SoundPlayService} from './../../service/sound-play.service'
 import {RecordingService} from './../../service/recording.service';
+import {RecognitionService} from './../../service/recognition.service';
 
 
 @Component({
@@ -85,12 +86,14 @@ export class DebateLayoutComponent implements OnInit {
               private livedebate_firebase: LiveDebateFirebaseService,
               private skyway : SkywayService,
               private sound_play: SoundPlayService,
-              private recording: RecordingService) { }
+              private recording: RecordingService,
+              private recognition: RecognitionService) { }
 
   ngOnInit() {
     this.skyway.join_room('main', this.event_id ,null);
     this.sound_play.PlayPrepFinishSpeechStart();
     this.recording.initialize();
+    this.recognition.initialize();
   }
 
   ngOnChanges(){

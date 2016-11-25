@@ -20,6 +20,8 @@ import {EnvironmentGuardService} from './service/environment-guard.service';
 import {SoundPlayService} from './service/sound-play.service';
 import {RecordingService} from './service/recording.service';
 import {SocketstreamService} from './service/socketstream.service';
+import {RecognitionService} from './service/recognition.service';
+
 import { UserVideoComponent } from './common/user-video/user-video.component';
 import { MotionComponent } from './common/motion/motion.component';
 import { PreparationDocumentComponent } from './common/preparation_document/preparation-document/preparation-document.component';
@@ -85,6 +87,14 @@ import { TestSocketComponent } from './test-socket/test-socket.component';
     UserAudioComponent,
     TestSocketComponent
   ],
-  providers: [LiveDebateFirebaseService, SkywayService, EnvironmentGuardService, SoundPlayService,RecordingService, SocketstreamService]
+  providers: [
+    LiveDebateFirebaseService, 
+    SkywayService, 
+    EnvironmentGuardService, 
+    SoundPlayService,
+    RecordingService, 
+    SocketstreamService,
+    RecognitionService
+  ]
 })
 export class LiveVideoDebateModule {}
