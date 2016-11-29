@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserauthService} from './../../core/service/userauth.service';
 import {LiveDebateFirebaseService} from './live-debate-firebase.service';
-
+import { Http }    from '@angular/http';
 declare var window:any;
 
 
@@ -16,7 +16,11 @@ export class RecognitionService {
 
 
   constructor(private user_auth : UserauthService,
-              private livedebate_firebase: LiveDebateFirebaseService) { }
+              private livedebate_firebase: LiveDebateFirebaseService,
+              private http: Http) { }
+
+
+  private translation_server_url = "https://recording2.mixidea.org/translate"
 
   initialize(){
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -32,7 +36,9 @@ export class RecognitionService {
       const results = e.results;
       for(let i = e.resultIndex; i<results.length; i++){
         if(results[i].isFinal){
-          this.StoreData(results[i][0].transcript);
+          const transcripted_sentence = results[i][0].transcript;
+          this.execute_with_transcription(transcripted_sentence);
+          //this.StoreData(results[i][0].transcript);
         }
       }
     };
@@ -80,18 +86,44 @@ export class RecognitionService {
     ,1000);
   }
   
-
-  StoreData(text){
+  execute_with_transcription(text){
     	console.log(text);
       const current_time_value = Date.now();	
       const audio_time =  current_time_value - this.speech_start_time;
+      this.StoreData(text, audio_time);
+      this.translation(text, audio_time);
+  }
+
+
+  StoreData(text, audio_time){
+    	// console.log(text);
+      // const current_time_value = Date.now();	
+      // const audio_time =  current_time_value - this.speech_start_time;
       const transcription_context_ref = this.transcription_ref + "/context";
 
-      const speech_obj = {}
-      speech_obj[audio_time]=text
+      const speech_obj = {};
+      speech_obj[audio_time]=text;
       this.livedebate_firebase.update_firebase_data(transcription_context_ref, speech_obj);
+
   }
   
+  translation(text, audio_time){
+
+    const target_lang = 'ja'
+    const translation_ref = this.transcription_ref + "/translate/" + target_lang + "/" + audio_time;
+    const req_url =
+     this.translation_server_url +
+      "?text=" + text + 
+      "&target_lang=" + target_lang + 
+      "&firebase_ref=" + translation_ref;
+    
+    this.http.get(req_url)
+      .toPromise()
+      .then((response) => {console.log(response)})
+      .catch((err)=>{
+        console.log(err);
+      });
+  }
 
 
 

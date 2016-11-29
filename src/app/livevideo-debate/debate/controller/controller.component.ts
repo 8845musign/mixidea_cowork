@@ -134,6 +134,7 @@ export class ControllerComponent implements OnInit,OnChanges {
 
   test_sound(){
     this.sound_play.PlayPoi();
+    this.recognition.translation("I have a pen", 100);
   }
   test_sound2(){
     this.sound_play.PlaySpeechStart();

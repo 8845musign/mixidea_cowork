@@ -45,7 +45,7 @@ export class SkywayService {
               private livedebate_firebase: LiveDebateFirebaseService) {
 
     this.local_video_stream_subject = new BehaviorSubject(null);
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  //  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 
   }

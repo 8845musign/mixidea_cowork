@@ -45,6 +45,7 @@ import { LeftPanelComponent } from './debate/left-panel/left-panel.component';
 import { UserVideoIconComponent } from './common/user-video-icon/user-video-icon.component';
 import { UserAudioComponent } from './common/user-audio/user-audio.component';
 import { TestSocketComponent } from './test-socket/test-socket.component';
+import { HttpModule }    from '@angular/http';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { TestSocketComponent } from './test-socket/test-socket.component';
     CommonModule,
     LivevideoDebateRoutingModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    HttpModule
   ],
   declarations: [
     IntroductionLayoutComponent,
