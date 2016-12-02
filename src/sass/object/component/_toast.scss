@@ -1,0 +1,55 @@
+// Toast
+//
+// Notification Toast.
+// c-toast__containerに一つまたは複数のc-toastを入れること
+//
+// Markup:
+// <div class="c-toast__container">
+//    <div class="c-toast">
+//      <img class="c-toast__icon c-icon is-small" src="http://lorempixel.com/150/150">
+//      <p class="c-toast__body">Some textddddddddddddddddddddddddddddddddd.</p>
+//      <button type="button" class="c-toast__button c-btn is-xs">POI</button>
+//    </div>
+//    <div class="c-toast">
+//      <img class="c-toast__icon c-icon is-small" src="http://lorempixel.com/150/150">
+//      <p class="c-toast__body">Some textddddddddddddddddddddddddddddddddd.</p>
+//      <button type="button" class="c-toast__button c-btn is-xs">POI</button>
+//    </div>
+// </div>
+//
+// Styleguide component.1
+.c-toast {
+    width: 210px;
+    height: 49px;
+    margin-bottom: 14px;
+    box-shadow: 0px 2px 3.84px 0.16px rgba(83, 83, 83, 0.67);
+
+    &__container {
+        width: 210px;
+    }
+
+    &__container &:last-child {
+        margin-bottom: 0;
+    }
+
+    &__button {
+        margin-top: 11px;
+    }
+
+    &__icon {
+        margin-top: 9px;
+        margin-left: 7px;
+        vertical-align: middle;
+    }
+
+    &__body {
+        display: inline-block;
+        margin-top: 11px;
+        margin-bottom: 0;
+        width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+    }
+}

@@ -1,7 +1,20 @@
-.btn {
+// Button
+//
+// Button
+//
+// Markup:
+// <button class="c-btn {{modifier_class}}">button</button>
+//
+// .is-small - small
+// .is-xs - extra small
+// .is-inverse - inverse
+// .is-block - block level
+//
+// Styleguide 1.1
+.c-btn {
     display: inline-block;
     margin: 0;
-    padding: 9px 28px 9px;
+    padding: 9px 14px 9px;
     border: 1px solid $brand-color;
     border-radius: 3px;
     background-color: $brand-color;
@@ -11,6 +24,7 @@
         background-color .2s ease-out,
         border-color .2s ease-out,
         color .2s ease-out;
+    vertical-align: middle;
 
     &:hover,
     &:active,
@@ -24,6 +38,13 @@
         padding-top: 4px;
         padding-bottom: 4px;
     }
+
+    &.is-xs {
+        padding-top: 2px;
+        padding-bottom: 2px;
+        font-size: 1.2rem;
+    }
+
 
     &:active {
         box-shadow: inset 0px 2px 4px 0px rgba(4, 0, 0, 0.29);
@@ -71,5 +92,9 @@
     &.is-opp.is-inverse:link {
         background-color: $brand-color-opp;
         color: #FFF;
+    }
+
+    &.is-block {
+       width: 100%; 
     }
 }
